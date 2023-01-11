@@ -7,7 +7,7 @@ public class Task<T> implements Callable<T>, Comparable<Task>{
 
     private T returnVal;
     private TaskType type;
-    private Callable<?> action;
+    private Callable<T> action;
     private Task<T> task;
     private FutureTask<T> futureTask;
 
@@ -19,26 +19,20 @@ public class Task<T> implements Callable<T>, Comparable<Task>{
         this.futureTask = futureTask;
     }
 
-    private Task(Callable<?> callable, TaskType type) {
+    private Task(Callable<T> callable, TaskType type) {
         this.type = type;
         this.action = callable;
     }
 
 
-     public TaskType getType(){
-        return this.type;
-     }
-
-
-
-
-    public static Task createTask(Callable<?> task, TaskType type){
-        return new Task(task, type);
+    public static <V> Task<V> createTask(Callable<V> task, TaskType type){
+        return new Task<V>(task, type);
     }
 
-    public Task createTask(){
-        return createTask(this.action, TaskType.OTHER);
-    }
+//
+//    public Task createTask(){
+//        return createTask(this.action, TaskType.OTHER);
+//    }
 
 
     @Override

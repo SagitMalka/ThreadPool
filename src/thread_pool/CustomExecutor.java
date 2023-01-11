@@ -31,18 +31,18 @@ public class CustomExecutor {
     /**
      * TODO check what the return type should be
      */
-    public FutureTask submit(Callable operation, TaskType type) {
+    public <T> FutureTask<T>  submit(Callable<T> operation, TaskType type) {
         /** insert task to queue */
         Task task;
         if (operation instanceof Task) {
-            task = (Task) operation;
+            task = (Task<T>) operation;
         } else {
             task = Task.createTask(operation, TaskType.OTHER);
         }
         taskQueue.add(task);
 
 
-        FutureTask futureTask = new FutureTask<>(task);
+        FutureTask<T> futureTask = new FutureTask<T>(task);
         task.setFutureTask(futureTask);
 
 //        if (threads.isEmpty()) {
@@ -56,6 +56,11 @@ public class CustomExecutor {
 //
 //        }
         return futureTask;
+    }
+
+
+    public <T> FutureTask<T> submit(Callable<T> operation){
+        return submit(operation, TaskType.OTHER);
     }
 
     private void runTasks(){
