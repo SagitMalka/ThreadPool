@@ -30,19 +30,6 @@ public class Task<T> implements Callable<T>, Comparable<Task>{
      }
 
 
-//    public Callable<?> callable() throws Exception {
-//        return null;
-//    }
-
-//    public int getPriority();
-
-//    public thread_pool.TaskType getTaskType(thread_pool.Task task){
-//        return task.getType();
-//    }
-//
-//    private thread_pool.TaskType getType() {
-//        return type;
-//    }
 
 
     public static Task createTask(Callable<?> task, TaskType type){

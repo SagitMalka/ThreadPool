@@ -2,28 +2,23 @@ package thread_pool;
 
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.concurrent.*;
 
 public class CustomExecutor {
 
     ThreadFactory threadFactory;
-    int core = Runtime.getRuntime().availableProcessors();
-    ExecutorService pool = Executors.newFixedThreadPool(core/2, threadFactory );
-
-
-
-
-    /**   Here*/
     private PriorityQueue<Task> taskQueue;
     private ArrayList<Thread> threads;
-    private int availableProcessors;
+    private int availableProcessors = Runtime.getRuntime().availableProcessors();
+
+    ExecutorService pool = Executors.newFixedThreadPool(availableProcessors/2, threadFactory );
+
 
     public CustomExecutor() {
         this.taskQueue = new PriorityQueue<>();
         this.threads = new ArrayList<>();
-        availableProcessors = Runtime.getRuntime().availableProcessors();
+
         for (int i = 0; i < availableProcessors / 2; i++) {
             Thread thread = new Thread(() -> runTasks());
             threads.add(thread);
@@ -36,7 +31,7 @@ public class CustomExecutor {
     /**
      * TODO check what the return type should be
      */
-    public FutureTask submit(Callable operation) {
+    public FutureTask submit(Callable operation, TaskType type) {
         /** insert task to queue */
         Task task;
         if (operation instanceof Task) {
@@ -74,6 +69,9 @@ public class CustomExecutor {
         return "hi";
     }
 
+    public void gracefullyTerminate() {
+    }
+
 
 
     class ExecutorThread extends Thread {
@@ -89,11 +87,7 @@ public class CustomExecutor {
         }
     }
 
-    public void submit(Callable<?> operation, TaskType type) {
-        Task task = Task.createTask(operation, type);
-        taskQueue.add(task);
-        return;
-    }
+
 
 
 
